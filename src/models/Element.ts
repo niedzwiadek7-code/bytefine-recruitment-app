@@ -7,6 +7,7 @@ export class Element {
   type: string = ''
 
   text?: string
+  color?: string
   image?: Blob
 
   constructor(

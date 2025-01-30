@@ -32,6 +32,35 @@ function App() {
     })
   };
 
+  const setContent = (id: number, content: any) => {
+    setPoster((prevPoster) => {
+      const element = prevPoster.elements.find(e => e.id === id)
+
+      if (element) {
+        switch (element.type) {
+          case 'text':
+            element.text = content.text || ''
+            element.color = content.color || ''
+            break
+          default:
+            break
+        }
+
+        prevPoster.updateElement(id, element)
+      }
+
+      return Poster.newPoster(prevPoster)
+    })
+  }
+
+  const deleteElement = (id: number) => {
+    setPoster((prevPoster) => {
+      prevPoster.removeElement(id)
+
+      return Poster.newPoster(prevPoster)
+    })
+  }
+
   return (
     <div className="App">
       <div
@@ -43,6 +72,8 @@ function App() {
           <PosterCreator
             poster={poster}
             handleBoxChange={handleBoxChange}
+            setContent={setContent}
+            deleteElement={deleteElement}
           />
         </div>
 
@@ -70,9 +101,9 @@ function App() {
                     poster.index,
                     100,
                     100,
-                    200,
-                    100,
-                    'Hello World'
+                    300,
+                    150,
+                    ''
                   ))
 
                   setPoster(Poster.newPoster(poster))
@@ -89,7 +120,7 @@ function App() {
                     100,
                     200,
                     100,
-                    'Hello World'
+                    ''
                   ))
 
                   setPoster(Poster.newPoster(poster))
@@ -106,7 +137,7 @@ function App() {
                     100,
                     200,
                     100,
-                    'Hello World'
+                    ''
                   ))
 
                   setPoster(Poster.newPoster(poster))

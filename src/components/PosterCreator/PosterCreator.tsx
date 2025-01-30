@@ -1,18 +1,30 @@
 import {Poster} from "../../models";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import startImage from "../../assets/startimage.png"
 import ElementComponent from "./Element";
 
 type Props = {
   poster: Poster
   handleBoxChange: (id: number, position: any, size: any) => void
+  setContent: (id: number, content: any) => void
+  deleteElement: (id: number) => void
 }
 
 const PosterCreator: React.FC<Props> = ({
   poster,
-  handleBoxChange
+  handleBoxChange,
+  setContent,
+  deleteElement
 }) => {
   const [active, setActive] = useState<number | null>(null)
+  const [actualElementsLength, setActualElementsLength] = useState<number>(poster.elements.length)
+
+  useEffect(() => {
+    setActualElementsLength(poster.elements.length)
+    if (poster.elements.length > actualElementsLength) {
+      setActive(poster.elements[poster.elements.length - 1].id)
+    }
+  }, [JSON.stringify(poster.elements)]);
 
   if (poster.elements.length === 0) {
     return (
@@ -24,7 +36,7 @@ const PosterCreator: React.FC<Props> = ({
     )
   }
 
-  const setActiveFn = (id: number) => {
+  const setActiveFn = (id: number | null) => {
     setActive(id)
   }
 
@@ -34,10 +46,13 @@ const PosterCreator: React.FC<Props> = ({
     >
       {poster.elements.map((element) => (
         <ElementComponent
+          key={element.id}
           element={element}
           handleBoxChange={handleBoxChange}
           isActive={active === element.id}
           setActive={setActiveFn}
+          setContent={setContent}
+          deleteElement={deleteElement}
         />
       ))}
     </div>

@@ -1,29 +1,49 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import {Rnd} from "react-rnd";
 import {Element, Text} from "../../models";
 import TextComponent from "./Text";
 import {ReactComponent as MoveIcon} from "../../assets/icons/move.svg";
 import {ReactComponent as TrashIcon} from "../../assets/icons/trash.svg";
+import OutsideClickHandler from "../OutsideClickHandler";
+import useOutsideClickHandler from "../../hooks/outsideClickHandler";
 
 type Props = {
   element: Element
   handleBoxChange: (id: number, position: any, size: any) => void
   isActive: boolean
-  setActive: (id: number) => void
+  setActive: (id: number | null) => void
+  setContent: (id: number, content: any) => void
+  deleteElement: (id: number) => void
 }
 
 const ElementComponent: React.FC<Props> = ({
   element,
   handleBoxChange,
   isActive,
-  setActive
+  setActive,
+  setContent,
+  deleteElement
 }) => {
+  const wrapper = useRef<HTMLDivElement>(null)
+  const isActiveRef = useRef<boolean>(isActive)
+
+  useEffect(() => {
+    isActiveRef.current = isActive
+  }, [isActive]);
+
+  useOutsideClickHandler(wrapper, () => {
+    if (isActiveRef.current) {
+      setActive(null)
+    }
+  })
+
   const RenderElement: React.FC<{ element: Element}> = ({ element }) => {
     switch (element.type) {
       case 'text':
         return <TextComponent
           element={element as Text}
           isActive={isActive}
+          setContent={setContent}
         />
       default:
         return <></>
@@ -51,62 +71,69 @@ const ElementComponent: React.FC<Props> = ({
       onDragStart={() => setActive(element.id)}
       onClick={() => setActive(element.id)}
       dragHandleClassName={`custom-drag-handle-${element.id}`}
-      resizeHandleClasses={{
-        bottomRight: `custom-resize-handle-${element.id}`
+      resizeHandleComponent={{
+        bottomRight: <div
+          className={`absolute bottom-0 right-0 bg-white rounded-full p-1 z-[1000]`}
+        >
+          <div className={`bg-primary w-3 h-3 rounded-full`}/>
+        </div>
       }}
       enableResizing={{
         top: false,
-        right: true,
+        right: false,
         bottom: false,
         left: false,
         topRight: false,
-        bottomRight: true,
+        bottomRight: isActive,
         bottomLeft: false,
-        topLeft: false,
+        topLeft: false
       }}
     >
-      {
-        isActive && (
-          <>
-            <div
-              className={`absolute top-0 left-0 bg-white rounded-full p-1 custom-drag-handle-${element.id} cursor-move z-[1000]`}
-              style={{
-                transform: 'translate(-50%, -50%)'
-              }}
-            >
-              <MoveIcon
-                className='w-6 h-6 fill-primary'
-              />
-            </div>
-
-            <div
-              className={`absolute bottom-0 right-0 bg-white w-5 h-5 flex items-center justify-center rounded-full p-1 custom-resize-handle-${element.id} z-[1000]`}
-              style={{
-                transform: 'translate(50%, 50%)'
-              }}
-            >
-              <div className='bg-primary w-3 h-3 rounded-full'/>
-            </div>
-
-            <div
-              className={`absolute top-0 right-0 bg-white rounded-full p-1 cursor-pointer z-[1000]`}
-              style={{
-                transform: 'translate(50%, -50%)'
-              }}
-            >
-              <TrashIcon
-                className='w-4 h-4 fill-red-500'
-              />
-            </div>
-          </>
-        )
-      }
-
       <div
+        ref={wrapper}
+        // onOutsideClick={() => {
+        //   console.log('outside click')
+        //   console.log(isActive)
+        //   if (isActive) {
+        //     setActive(null)
+        //  }
+        // }}
         className={`outline-none w-full h-full relative ${isActive && 'border-2 border-primary'}`}
       >
+        {
+          isActive && (
+            <>
+              <div
+                className={`absolute top-0 left-0 bg-white rounded-full p-1 custom-drag-handle-${element.id} cursor-move z-[1000]`}
+                style={{
+                  transform: 'translate(-50%, -50%)'
+                }}
+              >
+                <MoveIcon
+                  className='w-6 h-6 fill-primary'
+                />
+              </div>
+
+              <div
+                className={`absolute top-0 right-0 bg-white rounded-full p-1 cursor-pointer z-[1000]`}
+                style={{
+                  transform: 'translate(50%, -50%)'
+                }}
+                onClick={() => {
+                  deleteElement(element.id)
+                }}
+              >
+                <TrashIcon
+                  className='w-4 h-4 fill-red-500'
+                />
+              </div>
+            </>
+          )
+        }
+
         <RenderElement element={element} />
       </div>
+
     </Rnd>
   )
 }
