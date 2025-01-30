@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import './App.css';
-import startImage from './assets/startimage.png'
 import Header from './components/Header';
 import Line from "./components/Line";
 import Card from "./components/Card";
@@ -8,8 +7,31 @@ import { ReactComponent as TextSvg } from './assets/icons/text.svg'
 import { ReactComponent as ImageSvg } from './assets/icons/pictures.svg'
 import { ReactComponent as BackgroundSvg } from './assets/icons/background.svg'
 import Button from "./components/Button";
+import {Poster, Text} from "./models";
+import PosterCreator from "./components/PosterCreator/PosterCreator";
 
 function App() {
+  const [poster, setPoster] = useState<Poster>(new Poster())
+
+  const handleBoxChange = (id: number, position: any, size: any) => {
+    setPoster((prevPoster) => {
+      const element = prevPoster.elements.find(e => e.id === id)
+
+      if (element) {
+        element.x = position.x
+        element.y = position.y
+        if (size.width && size.height) {
+          element.width = size.width
+          element.height = size.height
+        }
+
+        prevPoster.updateElement(id, element)
+      }
+
+      return Poster.newPoster(prevPoster)
+    })
+  };
+
   return (
     <div className="App">
       <div
@@ -18,10 +40,9 @@ function App() {
         <div
           className='w-1/2 relative overflow-hidden'
         >
-          <img
-            src={startImage}
-            className="absolute top-0 left-0 w-full h-full object-contain"
-            alt="logo"
+          <PosterCreator
+            poster={poster}
+            handleBoxChange={handleBoxChange}
           />
         </div>
 
@@ -44,16 +65,52 @@ function App() {
               <Card
                 title='Text'
                 icon={<TextSvg className='w-20 h-20 fill-black75' />}
+                onClick={() => {
+                  poster.addElement(new Text(
+                    poster.index,
+                    100,
+                    100,
+                    200,
+                    100,
+                    'Hello World'
+                  ))
+
+                  setPoster(Poster.newPoster(poster))
+                }}
               />
 
               <Card
                 title='Image'
                 icon={<ImageSvg className='w-20 h-20 fill-black75'/>}
+                onClick={() => {
+                  poster.addElement(new Text(
+                    poster.index,
+                    100,
+                    100,
+                    200,
+                    100,
+                    'Hello World'
+                  ))
+
+                  setPoster(Poster.newPoster(poster))
+                }}
               />
 
               <Card
                 title='Background'
                 icon={<BackgroundSvg className='w-20 h-20 fill-black75'/>}
+                onClick={() => {
+                  poster.addElement(new Text(
+                    poster.index,
+                    100,
+                    100,
+                    200,
+                    100,
+                    'Hello World'
+                  ))
+
+                  setPoster(Poster.newPoster(poster))
+                }}
               />
             </div>
           </div>
