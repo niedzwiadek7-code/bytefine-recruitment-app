@@ -8,6 +8,7 @@ import { ReactComponent as ImageSvg } from '../assets/icons/pictures.svg'
 import { ReactComponent as BackgroundSvg } from '../assets/icons/background.svg'
 import Button from "./Button";
 import {usePoster} from "../context/Poster";
+import { toPng } from "html-to-image";
 
 const Editor: React.FC = () => {
   const {
@@ -26,6 +27,25 @@ const Editor: React.FC = () => {
       setBackground(reader.result as string)
     };
     reader.readAsDataURL(file);
+  }
+
+  const downloadPng = () => {
+    const contentWrapper = document.getElementById('content-wrapper') as HTMLElement;
+
+    toPng(contentWrapper, {
+      cacheBust: false,
+      canvasHeight: 1350,
+      canvasWidth: 1080,
+    })
+      .then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = 'poster.png';
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   return (
@@ -94,7 +114,9 @@ const Editor: React.FC = () => {
       <Line/>
 
       <div className='flex justify-end'>
-        <Button>
+        <Button
+          onClick={downloadPng}
+        >
           Export to PNG
         </Button>
       </div>

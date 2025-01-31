@@ -22,6 +22,7 @@ const PosterCreator: React.FC<Props> = () => {
 
   return (
     <div
+      id='content-wrapper'
       className={`w-full h-full ${!poster.background && 'bg-black50'}`}
     >
       {

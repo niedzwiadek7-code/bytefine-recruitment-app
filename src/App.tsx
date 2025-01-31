@@ -1,8 +1,5 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React from 'react';
 import './App.css';
-
-import Button from "./components/Button";
-import {Poster, Text} from "./models";
 import PosterCreator from "./components/PosterCreator/PosterCreator";
 import {PosterProvider} from "./context/Poster";
 import Editor from "./components/Editor";
@@ -12,16 +9,16 @@ function App() {
     <PosterProvider>
       <div className="App">
         <div
-          className='w-full min-h-screen py-12 px-24 flex gap-5 text-body'
+          className='w-full min-h-screen flex px-24 justify-center items-center gap-5 text-body'
         >
           <div
-            className='w-1/2 relative overflow-hidden'
+            className='w-1/2 relative flex justify-center items-center max-h-[85vh] max-w-[65vh] aspect-[4/5]'
           >
             <PosterCreator />
           </div>
 
           <div
-            className='w-1/2 flex flex-col gap-5'
+            className='flex flex-col gap-5 max-w-[50%] h-[85vh] aspect-[4/5]'
           >
             <Editor />
           </div>
