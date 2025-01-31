@@ -12,8 +12,21 @@ import {usePoster} from "../context/Poster";
 const Editor: React.FC = () => {
   const {
     poster,
-    addElement
+    addElement,
+    setBackground
   } = usePoster()
+  const imageInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleBackgroundChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setBackground(reader.result as string)
+    };
+    reader.readAsDataURL(file);
+  }
 
   return (
     <>
@@ -60,10 +73,20 @@ const Editor: React.FC = () => {
             }}
           />
 
+          <input
+            type='file'
+            className='hidden'
+            onChange={handleBackgroundChange}
+            ref={imageInputRef}
+            accept='image/*'
+          />
+
           <Card
             title='Background'
             icon={<BackgroundSvg className='w-20 h-20 fill-black75'/>}
-            onClick={() => {}}
+            onClick={() => {
+              imageInputRef.current?.click()
+            }}
           />
         </div>
       </div>

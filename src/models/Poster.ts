@@ -1,7 +1,7 @@
 import { Element } from './Element'
 
 export class Poster {
-  background: Blob | null = null
+  background: string | null = null
   elements: Element[] = []
   public index: number = 0
 
@@ -36,7 +36,7 @@ export class Poster {
     return newPoster
   }
 
-  setBackground(background: Blob) {
+  setBackground(background: string) {
     const newPoster = this.copyWith({})
     newPoster.background = background
     return newPoster

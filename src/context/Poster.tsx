@@ -18,6 +18,8 @@ class PosterClass {
 
   addElement: (element: any) => void
 
+  setBackground: (background: string) => void
+
   constructor(
     poster: Poster = new Poster(),
     setPoster: (poster: Poster) => void = () => {},
@@ -27,6 +29,7 @@ class PosterClass {
     activeElement: number | null = null,
     setActiveElement: (id: number | null) => void = () => {},
     addElement: (element: any) => void = () => {},
+    setBackground: (background: string) => void = () => {}
   ) {
     this.poster = poster
     this.setPoster = setPoster
@@ -36,6 +39,7 @@ class PosterClass {
     this.activeElement = activeElement
     this.setActiveElement = setActiveElement
     this.addElement = addElement
+    this.setBackground = setBackground
   }
 }
 
@@ -156,6 +160,10 @@ export const PosterProvider: React.FC<ProviderProps> = (props) => {
     })
   }
 
+  const setBackground = (background: string) => {
+    setPoster((prevPoster) => prevPoster.setBackground(background))
+  }
+
   return (
     <PosterContext.Provider value={new PosterClass(
       poster,
@@ -165,7 +173,8 @@ export const PosterProvider: React.FC<ProviderProps> = (props) => {
       deleteElement,
       activeElement,
       setActiveElement,
-      addElement
+      addElement,
+      setBackground
     )}>
       {props.children}
     </PosterContext.Provider>
