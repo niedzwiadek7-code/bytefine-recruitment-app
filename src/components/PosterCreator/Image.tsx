@@ -20,7 +20,6 @@ const ImageComponent: React.FC<Props> = ({
   } = usePoster()
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('whatever')
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -36,12 +35,18 @@ const ImageComponent: React.FC<Props> = ({
 
   useEffect(() => {
     if (!image) {
-      imageInputRef.current?.click();
+      setTimeout(() => {
+        if (isInitialLoad) {
+          setIsInitialLoad(false);
+          imageInputRef.current?.click();
+        }
+      }, 100);
 
       const handleFocus = () => {
         setTimeout(() => {
-          if (!image && !imageInputRef.current?.files?.length) {
-            // deleteElement(element.id);
+          const imageHTML = document.getElementById(`image-element-${element.id}`)
+          if (!imageHTML) {
+            deleteElement(element.id);
             // onRemove();
           }
         }, 100);
@@ -50,7 +55,7 @@ const ImageComponent: React.FC<Props> = ({
       window.addEventListener('focus', handleFocus);
       return () => window.removeEventListener('focus', handleFocus);
     }
-  }, []);
+  }, [image]);
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
@@ -64,6 +69,7 @@ const ImageComponent: React.FC<Props> = ({
 
       {image && (
         <img
+          id={`image-element-${element.id}`}
           src={image}
           alt="Uploaded Preview"
           onClick={() => setActiveElement(element.id)}
