@@ -5,30 +5,40 @@ export class Poster {
   elements: Element[] = []
   public index: number = 0
 
-  addElement(element: Element) {
-    console.log(this.index)
-    this.index += 1
-    this.elements.push(element)
+  addElement(element: Omit<Element, "id">) {
+    const newElement = { ...element, id: this.index }
+    const newPoster = this.copyWith({
+      elements: [...this.elements, newElement]
+    })
+    newPoster.index = this.index + 1
+    return newPoster
   }
 
   removeElement(id: number) {
-    this.elements = this.elements.filter(element => element.id !== id)
+    return this.copyWith({
+      elements: this.elements.filter(e => e.id !== id)
+    })
+  }
+
+  updateElement(id: number, update: Partial<Element>) {
+    return this.copyWith({
+      elements: this.elements.map(e =>
+        e.id === id ? { ...e, ...update } : e
+      )
+    })
+  }
+
+  private copyWith(params: Partial<Poster>) {
+    const newPoster = new Poster()
+    newPoster.background = this.background
+    newPoster.elements = params.elements ?? [...this.elements]
+    newPoster.index = this.index
+    return newPoster
   }
 
   setBackground(background: Blob) {
-    this.background = background
-  }
-
-  updateElement(id: number, element: Element) {
-    this.elements = this.elements.map(e => e.id === id ? element : e)
-  }
-
-  static newPoster(oldPoster: Poster): Poster {
-    const poster =  new Poster()
-    poster.background = oldPoster.background
-    poster.elements = oldPoster.elements
-    poster.index = oldPoster.index
-
-    return poster
+    const newPoster = this.copyWith({})
+    newPoster.background = background
+    return newPoster
   }
 }

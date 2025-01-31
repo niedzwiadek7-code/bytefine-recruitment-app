@@ -1,24 +1,45 @@
 import {Text} from "../../models";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import {usePoster} from "../../context/Poster";
 
 
 type Props = {
   element: Text
-  isActive: boolean
-  setContent: (id: number, content: any) => void
 }
 
 const TextComponent: React.FC<Props> = ({
   element,
-  isActive,
-  setContent
 }) => {
+  const {
+    setContent,
+    activeElement,
+    setActiveElement
+  } = usePoster()
+  const [isActive, setIsActive] = useState(activeElement === element.id)
   const [text, setText] = React.useState(element.text)
   const [fontColor, setFontColor] = React.useState(element.color)
   const textareaRef = React.useRef<HTMLTextAreaElement>(null)
 
+  useEffect(() => {
+    setIsActive(activeElement === element.id)
+
+    // if (activeElement === element.id && textareaRef.current) {
+    //   textareaRef.current.focus();
+    // }
+  }, [activeElement, element.id]);
+
+  // useEffect(() => {
+  //   setText(element.text);
+  //   setFontColor(element.color);
+  // }, [element.text, element.color]);
+
+  // useEffect(() => {
+  //   if (isActive && textareaRef.current) {
+  //     textareaRef.current.focus();
+  //   }
+  // }, [isActive]);
+
   const setContentFn = (color?: string) => {
-    console.log('on blurrr')
     setContent(element.id, {
       text,
       color: color || fontColor
@@ -40,11 +61,12 @@ const TextComponent: React.FC<Props> = ({
           <input
             id={`color-${color}-${element.id}`}
             type='radio'
-            name='color'
+            name={`color-${element.id}`}
             className='hidden'
             value={color}
             checked={fontColor === color}
             onChange={() => {
+              console.log('color', color)
               setFontColor(color)
               setContentFn(color)
 
@@ -97,6 +119,9 @@ const TextComponent: React.FC<Props> = ({
           if (textareaRef.current) {
             textareaRef.current.focus();
           }
+        }}
+        onFocus={() => {
+          setActiveElement(element.id)
         }}
         className='w-full h-full resize-none bg-transparent outline-none overflow-hidden placeholder-gray-500 text-center text-display'
         placeholder='Type your text here'

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Rnd} from "react-rnd";
 import {Element, Text} from "../../models";
 import TextComponent from "./Text";
@@ -6,44 +6,41 @@ import {ReactComponent as MoveIcon} from "../../assets/icons/move.svg";
 import {ReactComponent as TrashIcon} from "../../assets/icons/trash.svg";
 import OutsideClickHandler from "../OutsideClickHandler";
 import useOutsideClickHandler from "../../hooks/outsideClickHandler";
+import {usePoster} from "../../context/Poster";
 
 type Props = {
   element: Element
-  handleBoxChange: (id: number, position: any, size: any) => void
-  isActive: boolean
-  setActive: (id: number | null) => void
-  setContent: (id: number, content: any) => void
-  deleteElement: (id: number) => void
 }
 
 const ElementComponent: React.FC<Props> = ({
   element,
-  handleBoxChange,
-  isActive,
-  setActive,
-  setContent,
-  deleteElement
 }) => {
   const wrapper = useRef<HTMLDivElement>(null)
-  const isActiveRef = useRef<boolean>(isActive)
+  const {
+    activeElement,
+    setActiveElement,
+    deleteElement,
+    handleBoxChange
+  } = usePoster()
+  const [isActive, setIsActive] = useState(activeElement === element.id)
 
   useEffect(() => {
-    isActiveRef.current = isActive
-  }, [isActive]);
+    setIsActive(activeElement === element.id)
+  }, [activeElement, element.id]);
 
   useOutsideClickHandler(wrapper, () => {
-    if (isActiveRef.current) {
-      setActive(null)
-    }
-  })
+    setTimeout(() => {
+      if (isActive) {
+        setActiveElement(null)
+      }
+    }, 30)
+  }, [isActive])
 
   const RenderElement: React.FC<{ element: Element}> = ({ element }) => {
     switch (element.type) {
       case 'text':
         return <TextComponent
           element={element as Text}
-          isActive={isActive}
-          setContent={setContent}
         />
       default:
         return <></>
@@ -68,8 +65,8 @@ const ElementComponent: React.FC<Props> = ({
         alignItems: "center",
         justifyContent: "center"
       }}
-      onDragStart={() => setActive(element.id)}
-      onClick={() => setActive(element.id)}
+      // onDragStart={() => setActiveElement(element.id)}
+      // onClick={() => setActiveElement(element.id)}
       dragHandleClassName={`custom-drag-handle-${element.id}`}
       resizeHandleComponent={{
         bottomRight: <div
