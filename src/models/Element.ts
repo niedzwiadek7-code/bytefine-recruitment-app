@@ -8,7 +8,7 @@ export class Element {
 
   text?: string
   color?: string
-  image?: Blob
+  content?: string
 
   constructor(
     id: number,

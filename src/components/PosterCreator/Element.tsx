@@ -1,12 +1,13 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Rnd} from "react-rnd";
-import {Element, Text} from "../../models";
+import {Element, Image, Text} from "../../models";
 import TextComponent from "./Text";
 import {ReactComponent as MoveIcon} from "../../assets/icons/move.svg";
 import {ReactComponent as TrashIcon} from "../../assets/icons/trash.svg";
 import OutsideClickHandler from "../OutsideClickHandler";
 import useOutsideClickHandler from "../../hooks/outsideClickHandler";
 import {usePoster} from "../../context/Poster";
+import ImageComponent from "./Image";
 
 type Props = {
   element: Element
@@ -41,6 +42,10 @@ const ElementComponent: React.FC<Props> = ({
       case 'text':
         return <TextComponent
           element={element as Text}
+        />
+      case 'image':
+        return <ImageComponent
+          element={element as Image}
         />
       default:
         return <></>

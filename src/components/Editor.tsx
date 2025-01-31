@@ -2,7 +2,7 @@ import React from "react";
 import Header from './Header';
 import Line from "./Line";
 import Card from "./Card";
-import { Text } from "../models";
+import {Image, Text} from "../models";
 import { ReactComponent as TextSvg } from '../assets/icons/text.svg'
 import { ReactComponent as ImageSvg } from '../assets/icons/pictures.svg'
 import { ReactComponent as BackgroundSvg } from '../assets/icons/background.svg'
@@ -48,7 +48,16 @@ const Editor: React.FC = () => {
           <Card
             title='Image'
             icon={<ImageSvg className='w-20 h-20 fill-black75'/>}
-            onClick={() => {}}
+            onClick={() => {
+              addElement(new Image(
+                poster.index,
+                100,
+                100,
+                300,
+                150,
+                ''
+              ))
+            }}
           />
 
           <Card

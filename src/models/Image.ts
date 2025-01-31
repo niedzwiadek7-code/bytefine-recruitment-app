@@ -1,7 +1,7 @@
 import {Element} from "./Element";
 
 export class Image extends Element {
-  blob: Blob
+  content: string
 
   constructor(
     id: number,
@@ -9,10 +9,10 @@ export class Image extends Element {
     y: number,
     width: number,
     height: number,
-    blob: Blob
+    content: string
   ) {
     super(id, x, y, width, height)
-    this.blob = blob
+    this.content = content
     this.type = 'image'
   }
 }
