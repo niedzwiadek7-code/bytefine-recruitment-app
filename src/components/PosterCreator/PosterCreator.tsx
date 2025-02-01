@@ -1,19 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import startImage from '../../assets/startimage.png'
 import ElementComponent from './Element'
 import { usePoster } from '../../context/Poster'
+import ImageBackground from '../ImageBackground'
 
 type Props = {}
 
 const PosterCreator: React.FC<Props> = () => {
   const { poster } = usePoster()
 
+  useEffect(() => {
+    const preloadImage = (src: string) => {
+      const img = new Image()
+      img.src = src
+    }
+
+    if (poster.background) {
+      preloadImage(poster.background)
+    }
+    preloadImage(startImage)
+  }, [poster.background])
+
   if (poster.elements.length === 0 && !poster.background) {
     return (
-      <img
-        src={startImage}
-        className="absolute top-0 left-0 w-full h-full object-contain"
-        alt="logo"
+      <ImageBackground
+        alt="Start Image"
+        image={startImage}
       />
     )
   }
@@ -25,10 +37,9 @@ const PosterCreator: React.FC<Props> = () => {
     >
       {
         poster.background && (
-          <img
-            src={poster.background}
-            className="absolute top-0 left-0 w-full h-full object-cover"
-            alt="background"
+          <ImageBackground
+            alt="Background"
+            image={poster.background}
           />
         )
       }
