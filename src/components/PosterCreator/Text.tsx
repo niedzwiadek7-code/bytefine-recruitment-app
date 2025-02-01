@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, {
+  useEffect, useRef, useState,
+} from 'react'
 import { Text } from '../../models'
 import { usePoster } from '../../context/Poster'
+import useAutoFontSize from '../../hooks/autoFontSize'
 
 type Props = {
   element: Text
@@ -93,22 +96,63 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   )
 }
 
-const TextComponent: React.FC<Props> = ({
-  element,
-}) => {
+const TextComponent: React.FC<Props> = ({ element }) => {
   const {
     setContent,
     activeElement,
     setActiveElement,
+    deleteElement,
   } = usePoster()
   const [isActive, setIsActive] = useState(activeElement === element.id)
-  const [text, setText] = React.useState(element.text)
-  const [fontColor, setFontColor] = React.useState(element.color)
-  const textareaRef = React.useRef<HTMLTextAreaElement>(null)
+  const [isEditing, setIsEditing] = useState(false)
+  const [text, setText] = useState(element.text)
+  const [fontColor, setFontColor] = useState(element.color)
 
   useEffect(() => {
+    if (activeElement !== element.id && !text) {
+      deleteElement(element.id)
+      return
+    }
+
+    if (activeElement === element.id) {
+      setIsEditing(true)
+    }
+
     setIsActive(activeElement === element.id)
-  }, [activeElement, element.id])
+  }, [activeElement])
+
+  const containerRef = useRef<HTMLDivElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 })
+
+  const { fontSize, measurerRef } = useAutoFontSize(
+    text,
+    containerSize.width,
+    containerSize.height,
+    { minSize: 12, maxSize: 72, defaultSize: 40 },
+  )
+
+  useEffect(() => {
+    if (!containerRef.current) return
+    const observer = new ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        const { width, height } = entry.contentRect
+        setContainerSize({
+          width,
+          height,
+        })
+      })
+    })
+    observer.observe(containerRef.current)
+    return () => observer.disconnect()
+  }, [containerRef])
+
+  useEffect(() => {
+    if (isEditing && textareaRef.current) {
+      textareaRef.current.focus()
+      textareaRef.current.selectionStart = text.length
+    }
+  }, [isEditing])
 
   const setContentFn = (color?: string) => {
     setContent(element.id, {
@@ -120,45 +164,74 @@ const TextComponent: React.FC<Props> = ({
   return (
     <div
       className="p-2 flex items-center justify-center w-full h-full relative"
+      ref={containerRef}
     >
-      <textarea
-        ref={textareaRef}
-        value={text}
-        onChange={(e) => {
-          setText(e.target.value)
-
-          if (textareaRef.current) {
-            textareaRef.current.focus()
-          }
-        }}
-        onFocus={() => {
-          setActiveElement(element.id)
-        }}
-        className="w-full h-full resize-none bg-transparent outline-none overflow-hidden placeholder-gray-500 text-center text-display"
-        placeholder="Type your text here"
+      <div
+        ref={measurerRef}
         style={{
-          color: fontColor,
+          position: 'absolute',
+          visibility: 'hidden',
+          whiteSpace: 'pre-wrap',
+          fontFamily: 'inherit',
+          fontWeight: 'inherit',
+          width: containerSize.width,
         }}
-        onBlur={() => setContentFn()}
-      />
+      >
+        {text}
+      </div>
 
-      {
-        isActive && (
-          <div
-            className="absolute bottom-0 left-0 pt-2"
-            style={{
-              transform: 'translateY(110%)',
-            }}
-          >
-            <ColorPicker
-              fontColor={fontColor}
-              setFontColor={setFontColor}
-              element={element}
-              setContentFn={setContentFn}
-            />
-          </div>
-        )
-      }
+      {(isEditing || !text) ? (
+        <textarea
+          ref={textareaRef}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onBlur={() => {
+            setContentFn()
+            setIsEditing(false)
+          }}
+          className="w-full h-full resize-none bg-transparent outline-none overflow-hidden placeholder-gray-500 text-center text-display"
+          placeholder="Type your text here"
+          style={{
+            color: fontColor,
+            fontSize: `${fontSize}px`,
+            lineHeight: `${fontSize * 1.2}px`,
+          }}
+        />
+      ) : (
+        <div
+          className="w-full h-full flex items-center justify-center cursor-text break-words text-center"
+          style={{
+            color: fontColor,
+            fontSize: `${fontSize}px`,
+            lineHeight: `${fontSize * 1.2}px`,
+            wordBreak: 'break-word',
+            whiteSpace: 'pre-wrap',
+          }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={() => {}}
+          onClick={() => {
+            setActiveElement(element.id)
+            setIsEditing(true)
+          }}
+        >
+          {text || ' '}
+        </div>
+      )}
+
+      {isActive && (
+        <div
+          className="absolute bottom-0 left-0 pt-2"
+          style={{ transform: 'translateY(110%)' }}
+        >
+          <ColorPicker
+            fontColor={fontColor}
+            setFontColor={setFontColor}
+            element={element}
+            setContentFn={setContentFn}
+          />
+        </div>
+      )}
     </div>
   )
 }
