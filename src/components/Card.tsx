@@ -13,7 +13,7 @@ const Card: React.FC<Props> = ({
 }) => {
   return (
     <div
-      className='bg-white97 flex flex-col items-center gap-5 pt-10 pb-2 rounded-lg cursor-pointer'
+      className='bg-white97 flex flex-col items-center gap-5 pt-10 pb-2 rounded-lg cursor-pointer select-none'
       onClick={onClick}
     >
       {icon}

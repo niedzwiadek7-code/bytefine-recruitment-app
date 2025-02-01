@@ -13,7 +13,7 @@ const Button: React.FC<Props> = ({
 }) => {
   return (
     <button
-      className='bg-primary hover:bg-primary700 focus:bg-primary disabled:bg-black25 text-white py-2 px-8 rounded-md font-semibold text-button'
+      className='bg-primary hover:bg-primary700 focus:bg-primary disabled:bg-black25 text-white py-2 px-8 rounded-md font-semibold text-button select-none'
       disabled={disabled}
       onClick={onClick}
     >

@@ -40,14 +40,14 @@ const Header = () => {
     <div className='flex justify-between items-center'>
       <div className='flex flex-start items-center gap-3 font-bold text-black75'>
         <PenSvg className='w-10 h-10' />
-        <h1 className='text-display'>Canvas Editor</h1>
+        <h1 className='text-display select-none'>Canvas Editor</h1>
       </div>
 
       <div
         className='flex gap-3 border-b border-solid border-red cursor-pointer'
         onClick={() => setShowModal(true)}
       >
-        <div className='text-red'>Reset</div>
+        <div className='text-red select-none'>Reset</div>
         <ResetSvg className='fill-red' />
       </div>
 
@@ -77,15 +77,15 @@ const Header = () => {
           <div
             className='flex items-center justify-center w-full flex-col px-20'
           >
-            <h2 className="text-xl font-bold mb-2">WARNING</h2>
-            <p className="text-sm mb-4">
+            <h2 className="text-xl font-bold mb-2 select-none">WARNING</h2>
+            <p className="text-sm mb-4 select-none">
               You're about to reset the whole process. Are you sure you want to do it?
             </p>
           </div>
 
           <div className="flex gap-4 mt-4">
             <button
-              className="px-4 py-2 bg-white rounded hover:bg-white"
+              className="px-4 py-2 bg-white rounded hover:bg-white select-none"
               onClick={() => setShowModal(false)}
             >
               Cancel

@@ -68,7 +68,9 @@ const Editor: React.FC = () => {
       <div
         className='w-full h-16 flex justify-start items-center bg-white97 px-5 rounded-lg'
       >
-        <div>
+        <div
+          className='select-none'
+        >
           Add content
         </div>
       </div>
