@@ -10,6 +10,8 @@ import Button from "./Button";
 import {usePoster} from "../context/Poster";
 import { toPng } from "html-to-image";
 import {useBrowserFocus} from "../context/BrowserFocus";
+import {Simulate} from "react-dom/test-utils";
+import input = Simulate.input;
 
 const Editor: React.FC = () => {
   const {
@@ -31,6 +33,10 @@ const Editor: React.FC = () => {
     const reader = new FileReader();
     reader.onload = () => {
       setBackground(reader.result as string)
+
+      if (imageInputRef.current) {
+        imageInputRef.current.value = ''
+      }
     };
     reader.readAsDataURL(file);
   }
