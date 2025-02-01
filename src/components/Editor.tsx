@@ -3,7 +3,6 @@ import { toPng } from 'html-to-image'
 import Header from './Header'
 import Line from './Line'
 import Card from './Card'
-import { Image, Text } from '../models'
 import { ReactComponent as TextSvg } from '../assets/icons/text.svg'
 import { ReactComponent as ImageSvg } from '../assets/icons/pictures.svg'
 import { ReactComponent as BackgroundSvg } from '../assets/icons/background.svg'
@@ -13,7 +12,6 @@ import { useBrowserFocus } from '../context/BrowserFocus'
 
 const Editor: React.FC = () => {
   const {
-    poster,
     addElement,
     setBackground,
   } = usePoster()
@@ -79,14 +77,7 @@ const Editor: React.FC = () => {
             title="Text"
             icon={<TextSvg className="w-20 h-20 fill-black75" />}
             onClick={() => {
-              addElement(new Text(
-                poster.index,
-                100,
-                100,
-                300,
-                150,
-                '',
-              ))
+              addElement('text')
             }}
           />
 
@@ -94,14 +85,7 @@ const Editor: React.FC = () => {
             title="Image"
             icon={<ImageSvg className="w-20 h-20 fill-black75" />}
             onClick={() => {
-              addElement(new Image(
-                poster.index,
-                100,
-                100,
-                300,
-                150,
-                '',
-              ))
+              addElement('image')
             }}
           />
 

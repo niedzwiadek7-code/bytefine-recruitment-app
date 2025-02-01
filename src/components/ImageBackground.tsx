@@ -28,7 +28,7 @@ const ImageBackground: React.FC<Props> = ({
         opacity: loaded ? 1 : 0,
         transition: 'opacity 0.5s ease-in-out',
       }}
-      className="absolute top-0 left-0 w-full h-full object-cover"
+      className="absolute top-0 left-0 w-full h-full object-cover select-none"
       alt={alt}
     />
   )

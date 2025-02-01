@@ -3,16 +3,32 @@
 import React, {
   ReactNode, createContext, useState, useMemo,
 } from 'react'
-import { Poster } from '../models'
+import { Poster, Text, Image } from '../models'
+
+type Position = {
+  x: number
+  y: number
+}
+
+type Size = {
+  width?: number
+  height?: number
+}
+
+type Content = {
+  content: string
+  color: string
+  text: string
+}
 
 class PosterClass {
   poster: Poster
 
   setPoster: (poster: Poster) => void
 
-  handleBoxChange: (id: number, position: any, size: any) => void
+  handleBoxChange: (id: number, position: Position, size: Size) => void
 
-  setContent: (id: number, content: any) => void
+  setContent: (id: number, content: Partial<Content>) => void
 
   deleteElement: (id: number) => void
 
@@ -20,7 +36,7 @@ class PosterClass {
 
   setActiveElement: (id: number | null) => void
 
-  addElement: (element: any) => void
+  addElement: (type: string) => void
 
   setBackground: (background: string) => void
 
@@ -31,12 +47,12 @@ class PosterClass {
   constructor(
     poster: Poster = new Poster(),
     setPoster: (el: Poster) => void = () => {},
-    handleBoxChange: (id: number, position: any, size: any) => void = () => {},
-    setContent: (id: number, content: any) => void = () => {},
+    handleBoxChange: (id: number, position: Position, size: Size) => void = () => {},
+    setContent: (id: number, content: Partial<Content>) => void = () => {},
     deleteElement: (id: number) => void = () => {},
     activeElement: number | null = null,
     setActiveElement: (id: number | null) => void = () => {},
-    addElement: (element: any) => void = () => {},
+    addElement: (type: string) => void = () => {},
     setBackground: (background: string) => void = () => {},
     resetPoster: () => void = () => {},
     setInActiveElement: (id: number) => void = () => {},
@@ -65,13 +81,13 @@ export const PosterProvider: React.FC<ProviderProps> = (props) => {
   const [poster, setPoster] = useState<Poster>(new Poster())
   const [activeElement, setActiveElement] = useState<number | null>(null)
 
-  const handleBoxChange = (id: number, position: any, size: any) => {
+  const handleBoxChange = (id: number, position: Position, size: Size) => {
     setPoster(
       (prevPoster) => prevPoster.updateElement(id, { x: position.x, y: position.y, ...size }),
     )
   }
 
-  const setContent = (id: number, content: any) => {
+  const setContent = (id: number, content: Partial<Content>) => {
     setPoster((prevPoster) => prevPoster.updateElement(id, content))
   }
 
@@ -79,10 +95,35 @@ export const PosterProvider: React.FC<ProviderProps> = (props) => {
     setPoster((prevPoster) => prevPoster.removeElement(id))
   }
 
-  const addElement = (element: any) => {
+  const addElement = (type: string) => {
     setPoster((prevPoster) => {
-      const newPoster = prevPoster.addElement(element)
-      setActiveElement(element.id)
+      if (type === 'text') {
+        const element: Omit<Text, 'id'> = {
+          x: 100,
+          y: 100,
+          width: 300,
+          height: 150,
+          text: '',
+          type: 'text',
+          color: '#353535',
+        }
+
+        const { newPoster, index } = prevPoster.addElement(element)
+        setActiveElement(index)
+        return newPoster
+      }
+
+      const element: Omit<Image, 'id'> = {
+        x: 100,
+        y: 100,
+        width: 300,
+        height: 150,
+        content: '',
+        type: 'image',
+      }
+
+      const { newPoster, index } = prevPoster.addElement(element)
+      setActiveElement(index)
 
       return newPoster
     })

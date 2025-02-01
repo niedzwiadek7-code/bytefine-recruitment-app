@@ -13,7 +13,10 @@ export class Poster {
       elements: [...this.elements, newElement],
     })
     newPoster.index = this.index + 1
-    return newPoster
+    return {
+      newPoster,
+      index: this.index,
+    }
   }
 
   removeElement(id: number) {
