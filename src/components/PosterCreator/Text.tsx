@@ -163,19 +163,12 @@ const TextComponent: React.FC<Props> = ({ element }) => {
 
   return (
     <div
-      className="p-2 flex items-center justify-center w-full h-full relative"
+      className="p-2 flex items-center justify-center w-full h-full relative select-none"
       ref={containerRef}
     >
       <div
         ref={measurerRef}
-        style={{
-          position: 'absolute',
-          visibility: 'hidden',
-          whiteSpace: 'pre-wrap',
-          fontFamily: 'inherit',
-          fontWeight: 'inherit',
-          width: containerSize.width,
-        }}
+        className={`absolute invisible whitespace-pre-wrap break-words w-[${containerSize.width}px]`}
       >
         {text}
       </div>
@@ -199,13 +192,11 @@ const TextComponent: React.FC<Props> = ({ element }) => {
         />
       ) : (
         <div
-          className="w-full h-full flex items-center justify-center cursor-text break-words text-center"
+          className="w-full h-full flex items-center justify-center cursor-text break-words text-center whitespace-pre-wrap select-none"
           style={{
             color: fontColor,
             fontSize: `${fontSize}px`,
             lineHeight: `${fontSize * 1.2}px`,
-            wordBreak: 'break-word',
-            whiteSpace: 'pre-wrap',
           }}
           role="button"
           tabIndex={0}
@@ -221,7 +212,7 @@ const TextComponent: React.FC<Props> = ({ element }) => {
 
       {isActive && (
         <div
-          className="absolute bottom-0 left-0 pt-2"
+          className="absolute bottom-0 left-0 pt-2 select-none"
           style={{ transform: 'translateY(110%)' }}
         >
           <ColorPicker

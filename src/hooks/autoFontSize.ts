@@ -25,10 +25,10 @@ const useAutoFontSize = (
         const mid = Math.floor((low + high) / 2)
         measurer.style.fontSize = `${mid}px`
 
-        // const widthOk = measurer.scrollWidth <= maxWidth
+        const widthOk = measurer.scrollWidth <= maxWidth
         const heightOk = measurer.scrollHeight <= maxHeight
 
-        if (heightOk) {
+        if (widthOk && heightOk) {
           size = mid
           low = mid + 1
         } else {
@@ -44,5 +44,4 @@ const useAutoFontSize = (
 
   return { fontSize, measurerRef }
 }
-
 export default useAutoFontSize

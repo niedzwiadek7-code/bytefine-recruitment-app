@@ -64,11 +64,7 @@ const ElementComponent: React.FC<Props> = ({
         height: ref.offsetHeight,
       })}
       bounds="parent"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
+      className="flex items-center justify-center"
       // onDragStart={() => setActiveElement(element.id)}
       // onClick={() => setActiveElement(element.id)}
       dragHandleClassName={`custom-drag-handle-${element.id}`}

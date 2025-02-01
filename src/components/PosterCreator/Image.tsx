@@ -64,7 +64,9 @@ const ImageComponent: React.FC<Props> = ({
   }, [image])
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div
+      className="w-full h-full"
+    >
       <input
         type="file"
         className="hidden"
@@ -78,14 +80,9 @@ const ImageComponent: React.FC<Props> = ({
           id={`image-element-${element.id}`}
           src={image}
           alt="Uploaded Preview"
-          className="select-none"
           onClick={() => setActiveElement(element.id)}
           onKeyDown={() => {}}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-          }}
+          className="w-full h-full object-cover select-none"
         />
       )}
     </div>
