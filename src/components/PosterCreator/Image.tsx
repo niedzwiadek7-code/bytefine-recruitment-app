@@ -78,6 +78,7 @@ const ImageComponent: React.FC<Props> = ({
           id={`image-element-${element.id}`}
           src={image}
           alt="Uploaded Preview"
+          className='select-none'
           onClick={() => setActiveElement(element.id)}
           style={{
             width: '100%',

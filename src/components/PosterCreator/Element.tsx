@@ -4,7 +4,6 @@ import {Element, Image, Text} from "../../models";
 import TextComponent from "./Text";
 import {ReactComponent as MoveIcon} from "../../assets/icons/move.svg";
 import {ReactComponent as TrashIcon} from "../../assets/icons/trash.svg";
-import OutsideClickHandler from "../OutsideClickHandler";
 import useOutsideClickHandler from "../../hooks/outsideClickHandler";
 import {usePoster} from "../../context/Poster";
 import ImageComponent from "./Image";
@@ -19,9 +18,9 @@ const ElementComponent: React.FC<Props> = ({
   const wrapper = useRef<HTMLDivElement>(null)
   const {
     activeElement,
-    setActiveElement,
     deleteElement,
-    handleBoxChange
+    handleBoxChange,
+    setInActiveElement
   } = usePoster()
   const [isActive, setIsActive] = useState(activeElement === element.id)
 
@@ -31,10 +30,8 @@ const ElementComponent: React.FC<Props> = ({
 
   useOutsideClickHandler(wrapper, () => {
     setTimeout(() => {
-      if (isActive) {
-        setActiveElement(null)
-      }
-    }, 30)
+      setInActiveElement(element.id)
+    }, 100)
   }, [isActive])
 
   const RenderElement: React.FC<{ element: Element}> = ({ element }) => {
@@ -93,20 +90,13 @@ const ElementComponent: React.FC<Props> = ({
     >
       <div
         ref={wrapper}
-        // onOutsideClick={() => {
-        //   console.log('outside click')
-        //   console.log(isActive)
-        //   if (isActive) {
-        //     setActive(null)
-        //  }
-        // }}
         className={`outline-none w-full h-full relative ${isActive && 'border-2 border-primary'}`}
       >
         {
           isActive && (
             <>
               <div
-                className={`absolute top-0 left-0 bg-white rounded-full p-1 custom-drag-handle-${element.id} cursor-move z-[1000]`}
+                className={`absolute top-0 left-0 bg-white rounded-full p-1 custom-drag-handle-${element.id} cursor-move z-[10000]`}
                 style={{
                   transform: 'translate(-50%, -50%)'
                 }}
