@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useRef} from "react";
+import React, { ReactNode, useEffect, useRef } from 'react'
 
 type Props = {
   children: ReactNode
@@ -9,7 +9,7 @@ type Props = {
 const OutsideClickHandler: React.FC<Props> = ({
   children,
   onOutsideClick,
-  className
+  className,
 }) => {
   const wrapper = useRef<HTMLDivElement>(null)
 
@@ -19,11 +19,11 @@ const OutsideClickHandler: React.FC<Props> = ({
         onOutsideClick()
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, []);
+  }, [])
 
   return (
     <div

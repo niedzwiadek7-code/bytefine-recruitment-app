@@ -1,20 +1,20 @@
-import React, { ComponentType, useState } from "react";
-import { ReactComponent as PenSvg } from '../assets/icons/pen.svg';
-import { ReactComponent as ResetSvg } from '../assets/icons/reset.svg';
-import Modal from 'react-modal';
-import { ReactComponent as CloseSvg } from '../assets/icons/close.svg';
-import { ReactComponent as AlertTriangle } from '../assets/icons/alert.svg';
-import {usePoster} from "../context/Poster";
-import Button from "./Button";
+import React, { ComponentType, useState } from 'react'
+import Modal from 'react-modal'
+import { ReactComponent as PenSvg } from '../assets/icons/pen.svg'
+import { ReactComponent as ResetSvg } from '../assets/icons/reset.svg'
+import { ReactComponent as CloseSvg } from '../assets/icons/close.svg'
+import { ReactComponent as AlertTriangle } from '../assets/icons/alert.svg'
+import { usePoster } from '../context/Poster'
+import Button from './Button'
 
-const ModalSafeForReact18 = Modal as unknown as ComponentType<ReactModal['props']>;
-Modal.setAppElement('#root');
+const ModalSafeForReact18 = Modal as unknown as ComponentType<Modal['props']>
+Modal.setAppElement('#root')
 
 const Header = () => {
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false)
 
   const {
-    resetPoster
+    resetPoster,
   } = usePoster()
 
   const customStyles = {
@@ -34,21 +34,28 @@ const Header = () => {
     overlay: {
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
-  };
+  }
 
   return (
-    <div className='flex justify-between items-center'>
-      <div className='flex flex-start items-center gap-3 font-bold text-black75'>
-        <PenSvg className='w-10 h-10' />
-        <h1 className='text-display select-none'>Canvas Editor</h1>
+    <div className="flex justify-between items-center">
+      <div className="flex flex-start items-center gap-3 font-bold text-black75">
+        <PenSvg className="w-10 h-10" />
+        <h1 className="text-display select-none">Canvas Editor</h1>
       </div>
 
       <div
-        className='flex gap-3 border-b border-solid border-red cursor-pointer'
+        className="flex gap-3 border-b border-solid border-red cursor-pointer"
         onClick={() => setShowModal(true)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            setShowModal(true)
+          }
+        }}
       >
-        <div className='text-red select-none'>Reset</div>
-        <ResetSvg className='fill-red' />
+        <div className="text-red select-none">Reset</div>
+        <ResetSvg className="fill-red" />
       </div>
 
       <ModalSafeForReact18
@@ -58,7 +65,7 @@ const Header = () => {
       >
         <div className="flex flex-col items-center gap-2">
           <div
-            className='flex justify-end w-full'
+            className="flex justify-end w-full"
           >
             <CloseSvg
               className="fill-black cursor-pointer w-6 h-6"
@@ -67,19 +74,19 @@ const Header = () => {
           </div>
 
           <div
-            className='flex items-center justify-center w-full mb-5'
+            className="flex items-center justify-center w-full mb-5"
           >
             <AlertTriangle
-              className='fill-red w-[217px] h-[200px]'
+              className="fill-red w-[217px] h-[200px]"
             />
           </div>
 
           <div
-            className='flex items-center justify-center w-full flex-col px-20'
+            className="flex items-center justify-center w-full flex-col px-20"
           >
             <h2 className="text-xl font-bold mb-2 select-none">WARNING</h2>
             <p className="text-sm mb-4 select-none">
-              You're about to reset the whole process. Are you sure you want to do it?
+              You&#39;re about to reset the whole process. Are you sure you want to do it?
             </p>
           </div>
 
@@ -87,13 +94,14 @@ const Header = () => {
             <button
               className="px-4 py-2 bg-white rounded hover:bg-white select-none"
               onClick={() => setShowModal(false)}
+              type="button"
             >
               Cancel
             </button>
             <Button
               onClick={() => {
                 resetPoster()
-                setShowModal(false);
+                setShowModal(false)
               }}
             >
               Reset
@@ -102,7 +110,7 @@ const Header = () => {
         </div>
       </ModalSafeForReact18>
     </div>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

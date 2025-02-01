@@ -1,13 +1,20 @@
 export class Element {
   id: number
+
   x: number
+
   y: number
+
   width: number
+
   height: number
+
   type: string = ''
 
   text?: string
+
   color?: string
+
   content?: string
 
   constructor(
@@ -15,7 +22,7 @@ export class Element {
     x: number,
     y: number,
     width: number,
-    height: number
+    height: number,
   ) {
     this.id = id
     this.x = x

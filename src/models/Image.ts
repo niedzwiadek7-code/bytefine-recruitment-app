@@ -1,4 +1,4 @@
-import {Element} from "./Element";
+import { Element } from './Element'
 
 export class Image extends Element {
   content: string
@@ -9,7 +9,7 @@ export class Image extends Element {
     y: number,
     width: number,
     height: number,
-    content: string
+    content: string,
   ) {
     super(id, x, y, width, height)
     this.content = content

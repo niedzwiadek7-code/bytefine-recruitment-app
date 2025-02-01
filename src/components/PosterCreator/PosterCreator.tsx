@@ -1,9 +1,7 @@
-import {Poster} from "../../models";
-import React, {useEffect, useState} from "react";
-import startImage from "../../assets/startimage.png"
-import ElementComponent from "./Element";
-import {usePoster} from "../../context/Poster";
-import element from "./Element";
+import React from 'react'
+import startImage from '../../assets/startimage.png'
+import ElementComponent from './Element'
+import { usePoster } from '../../context/Poster'
 
 type Props = {}
 
@@ -22,7 +20,7 @@ const PosterCreator: React.FC<Props> = () => {
 
   return (
     <div
-      id='content-wrapper'
+      id="content-wrapper"
       className={`w-full h-full ${!poster.background && 'bg-black50'}`}
     >
       {
