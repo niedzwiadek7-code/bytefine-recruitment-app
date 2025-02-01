@@ -9,6 +9,7 @@ import { ReactComponent as BackgroundSvg } from '../assets/icons/background.svg'
 import Button from "./Button";
 import {usePoster} from "../context/Poster";
 import { toPng } from "html-to-image";
+import {useBrowserFocus} from "../context/BrowserFocus";
 
 const Editor: React.FC = () => {
   const {
@@ -16,6 +17,11 @@ const Editor: React.FC = () => {
     addElement,
     setBackground
   } = usePoster()
+
+  const {
+    setBrowserFocus
+  } = useBrowserFocus()
+
   const imageInputRef = React.useRef<HTMLInputElement>(null);
 
   const handleBackgroundChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,6 +111,7 @@ const Editor: React.FC = () => {
             title='Background'
             icon={<BackgroundSvg className='w-20 h-20 fill-black75'/>}
             onClick={() => {
+              setBrowserFocus(false)
               imageInputRef.current?.click()
             }}
           />

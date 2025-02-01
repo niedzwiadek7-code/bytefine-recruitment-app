@@ -1,6 +1,7 @@
 import { Image } from '../../models';
 import React, { useEffect, useState } from "react";
 import {usePoster} from "../../context/Poster";
+import {useBrowserFocus} from "../../context/BrowserFocus";
 
 type Props = {
   element: Image;
@@ -18,6 +19,10 @@ const ImageComponent: React.FC<Props> = ({
     deleteElement,
     setContent
   } = usePoster()
+
+  const {
+    setBrowserFocus
+  } = useBrowserFocus()
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -38,6 +43,7 @@ const ImageComponent: React.FC<Props> = ({
       setTimeout(() => {
         if (isInitialLoad) {
           setIsInitialLoad(false);
+          setBrowserFocus(false);
           imageInputRef.current?.click();
         }
       }, 100);
