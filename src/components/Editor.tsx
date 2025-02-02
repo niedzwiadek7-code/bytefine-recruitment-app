@@ -40,20 +40,22 @@ const Editor: React.FC = () => {
   const downloadPng = () => {
     const contentWrapper = document.getElementById('content-wrapper') as HTMLElement
 
-    toPng(contentWrapper, {
-      cacheBust: false,
-      canvasHeight: 1350,
-      canvasWidth: 1080,
-    })
-      .then((dataUrl) => {
-        const link = document.createElement('a')
-        link.download = 'poster.png'
-        link.href = dataUrl
-        link.click()
+    setTimeout(() => {
+      toPng(contentWrapper, {
+        cacheBust: false,
+        canvasHeight: 1350,
+        canvasWidth: 1080,
       })
-      .catch((error) => {
-        console.log(error)
-      })
+        .then((dataUrl) => {
+          const link = document.createElement('a')
+          link.download = 'poster.png'
+          link.href = dataUrl
+          link.click()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }, 150)
   }
 
   return (
