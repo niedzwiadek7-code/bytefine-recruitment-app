@@ -66,6 +66,14 @@ const TextComponent: React.FC<Props> = ({ element }) => {
       className="p-2 flex items-center justify-center w-full h-full relative select-none"
       ref={containerRef}
     >
+      <style>
+        {`
+          .dynamic-placeholder-${element.id}::placeholder {
+            color: ${element.color}40 !important;
+          }
+        `}
+      </style>
+
       <div
         ref={measurerRef}
         className={`absolute invisible whitespace-pre-wrap break-words w-[${containerSize.width}px]`}
@@ -88,7 +96,7 @@ const TextComponent: React.FC<Props> = ({ element }) => {
             })
             setIsEditing(false)
           }}
-          className="w-full h-full resize-none bg-transparent outline-none overflow-hidden placeholder-gray-500 text-center text-display"
+          className={`w-full h-full resize-none bg-transparent outline-none overflow-hidden placeholder-gray-500 text-center text-display dynamic-placeholder-${element.id}`}
           placeholder="Type your text here"
           style={{
             color: element.color,
