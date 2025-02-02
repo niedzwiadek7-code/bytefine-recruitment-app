@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Rnd } from 'react-rnd'
 import { Element, Image, Text } from '../../models'
-import TextComponent from './Text'
+import TextComponent from './Text/Text'
 import { ReactComponent as MoveIcon } from '../../assets/icons/move.svg'
 import { ReactComponent as TrashIcon } from '../../assets/icons/trash.svg'
 import useOutsideClickHandler from '../../hooks/outsideClickHandler'

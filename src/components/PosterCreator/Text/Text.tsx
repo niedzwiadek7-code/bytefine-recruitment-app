@@ -1,99 +1,13 @@
 import React, {
   useEffect, useRef, useState,
 } from 'react'
-import { Text } from '../../models'
-import { usePoster } from '../../context/Poster'
-import useAutoFontSize from '../../hooks/autoFontSize'
+import { Text } from '../../../models'
+import { usePoster } from '../../../context/Poster'
+import useAutoFontSize from '../../../hooks/autoFontSize'
+import ColorPicker from './ColorPicker'
 
 type Props = {
   element: Text
-}
-
-type ColorProps = {
-  color: string
-  fontColor: string
-  element: Text
-  // eslint-disable-next-line no-unused-vars
-  setFontColor: (color: string) => void
-  // eslint-disable-next-line no-unused-vars
-  setContentFn: (color?: string) => void
-}
-
-type ColorPickerProps = {
-  fontColor: string
-  // eslint-disable-next-line no-unused-vars
-  setFontColor: (color: string) => void
-  element: Text
-  // eslint-disable-next-line no-unused-vars
-  setContentFn: (color?: string) => void
-}
-
-const Color: React.FC<ColorProps> = ({
-  color,
-  fontColor,
-  element,
-  setFontColor,
-  setContentFn,
-}) => (
-  <>
-    <input
-      id={`color-${color}-${element.id}`}
-      type="radio"
-      name={`color-${element.id}`}
-      className="hidden"
-      value={color}
-      checked={fontColor === color}
-      onChange={() => {
-        setFontColor(color)
-        setContentFn(color)
-      }}
-    />
-
-    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-    <label
-      htmlFor={`color-${color}-${element.id}`}
-      className={`rounded-full p-[2px] cursor-pointer flex justify-content items-center ${fontColor === color ? 'border-2 border-white' : ''}`}
-    >
-      <div
-        className="w-4 h-4 rounded-full"
-        style={{
-          backgroundColor: color,
-        }}
-      />
-    </label>
-  </>
-)
-
-const ColorPicker: React.FC<ColorPickerProps> = ({
-  fontColor,
-  setFontColor,
-  element,
-  setContentFn,
-}) => {
-  const colors = [
-    '#353535',
-    '#ffffff',
-    '#cf0000',
-    '#0055ff',
-    '#00da16',
-  ]
-
-  return (
-    <div
-      className="flex items-center justify-center gap-[3px]"
-    >
-      {colors.map((color) => (
-        <Color
-          key={color}
-          color={color}
-          fontColor={fontColor}
-          element={element}
-          setFontColor={setFontColor}
-          setContentFn={setContentFn}
-        />
-      ))}
-    </div>
-  )
 }
 
 const TextComponent: React.FC<Props> = ({ element }) => {
@@ -101,19 +15,12 @@ const TextComponent: React.FC<Props> = ({ element }) => {
     setContent,
     activeElement,
     setActiveElement,
-    deleteElement,
   } = usePoster()
   const [isActive, setIsActive] = useState(activeElement === element.id)
   const [isEditing, setIsEditing] = useState(false)
   const [text, setText] = useState(element.text)
-  const [fontColor, setFontColor] = useState(element.color)
 
   useEffect(() => {
-    if (activeElement !== element.id && !text) {
-      deleteElement(element.id)
-      return
-    }
-
     if (activeElement === element.id) {
       setIsEditing(true)
     }
@@ -129,7 +36,7 @@ const TextComponent: React.FC<Props> = ({ element }) => {
     text,
     containerSize.width,
     containerSize.height,
-    { minSize: 12, maxSize: 72, defaultSize: 40 },
+    { minSize: 0, maxSize: 72, defaultSize: 40 },
   )
 
   useEffect(() => {
@@ -154,13 +61,6 @@ const TextComponent: React.FC<Props> = ({ element }) => {
     }
   }, [isEditing])
 
-  const setContentFn = (color?: string) => {
-    setContent(element.id, {
-      text,
-      color: color || fontColor,
-    })
-  }
-
   return (
     <div
       className="p-2 flex items-center justify-center w-full h-full relative select-none"
@@ -178,14 +78,20 @@ const TextComponent: React.FC<Props> = ({ element }) => {
           ref={textareaRef}
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onFocus={() => {
+            setActiveElement(element.id)
+            setIsEditing(true)
+          }}
           onBlur={() => {
-            setContentFn()
+            setContent(element.id, {
+              text,
+            })
             setIsEditing(false)
           }}
           className="w-full h-full resize-none bg-transparent outline-none overflow-hidden placeholder-gray-500 text-center text-display"
           placeholder="Type your text here"
           style={{
-            color: fontColor,
+            color: element.color,
             fontSize: `${fontSize}px`,
             lineHeight: `${fontSize * 1.2}px`,
           }}
@@ -194,7 +100,7 @@ const TextComponent: React.FC<Props> = ({ element }) => {
         <div
           className="w-full h-full flex items-center justify-center cursor-text break-words text-center whitespace-pre-wrap select-none"
           style={{
-            color: fontColor,
+            color: element.color,
             fontSize: `${fontSize}px`,
             lineHeight: `${fontSize * 1.2}px`,
           }}
@@ -216,10 +122,7 @@ const TextComponent: React.FC<Props> = ({ element }) => {
           style={{ transform: 'translateY(110%)' }}
         >
           <ColorPicker
-            fontColor={fontColor}
-            setFontColor={setFontColor}
             element={element}
-            setContentFn={setContentFn}
           />
         </div>
       )}
