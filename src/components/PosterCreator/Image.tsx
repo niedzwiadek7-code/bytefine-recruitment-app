@@ -16,7 +16,7 @@ const ImageComponent: React.FC<Props> = ({
 
   const {
     setActiveElement,
-    deleteElement,
+    // deleteElement,
     setContent,
   } = usePoster()
 
@@ -38,28 +38,35 @@ const ImageComponent: React.FC<Props> = ({
     reader.readAsDataURL(file)
   }
 
+  const startSearchingImage = () => {
+    setIsInitialLoad(false)
+    setBrowserFocus(false)
+    imageInputRef.current?.click()
+  }
+
   useEffect(() => {
     if (!image) {
-      setTimeout(() => {
-        if (isInitialLoad) {
-          setIsInitialLoad(false)
-          setBrowserFocus(false)
-          imageInputRef.current?.click()
-        }
-      }, 100)
-
-      const handleFocus = () => {
-        setTimeout(() => {
-          const imageHTML = document.getElementById(`image-element-${element.id}`)
-          if (!imageHTML) {
-            deleteElement(element.id)
-            // onRemove();
-          }
-        }, 100)
+      // setTimeout(() => {
+      if (isInitialLoad) {
+        startSearchingImage()
+        // setIsInitialLoad(false)
+        // setBrowserFocus(false)
+        // imageInputRef.current?.click()
       }
+      // }, 100)
 
-      window.addEventListener('focus', handleFocus)
-      return () => window.removeEventListener('focus', handleFocus)
+      // const handleFocus = () => {
+      //   setTimeout(() => {
+      //     const imageHTML = document.getElementById(`image-element-${element.id}`)
+      //     if (!imageHTML) {
+      //       deleteElement(element.id)
+      //       // onRemove();
+      //     }
+      //   }, 100)
+      // }
+      //
+      // window.addEventListener('focus', handleFocus)
+      // return () => window.removeEventListener('focus', handleFocus)
     }
   }, [image])
 
@@ -75,7 +82,7 @@ const ImageComponent: React.FC<Props> = ({
         accept="image/*"
       />
 
-      {image && (
+      {image ? (
         <img
           id={`image-element-${element.id}`}
           src={image}
@@ -84,6 +91,19 @@ const ImageComponent: React.FC<Props> = ({
           onKeyDown={() => {}}
           className="w-full h-full object-cover select-none"
         />
+      ) : (
+        <div
+          className="w-full h-full flex items-center justify-center text-display text-[#C9C9C9] bg-[#D9D9D9] select-none font-bold"
+          onClick={() => {
+            setActiveElement(element.id)
+            startSearchingImage()
+          }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={() => {}}
+        >
+          IMG
+        </div>
       )}
     </div>
   )

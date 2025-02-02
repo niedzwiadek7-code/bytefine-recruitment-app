@@ -63,7 +63,7 @@ const TextComponent: React.FC<Props> = ({ element }) => {
 
   return (
     <div
-      className="p-2 flex items-center justify-center w-full h-full relative select-none"
+      className="p-2 flex items-center justify-center w-full h-full relative select-none font-bold"
       ref={containerRef}
     >
       <style>
