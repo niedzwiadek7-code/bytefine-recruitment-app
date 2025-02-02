@@ -36,7 +36,9 @@ const TextComponent: React.FC<Props> = ({ element }) => {
     text,
     containerSize.width,
     containerSize.height,
-    { minSize: 0, maxSize: 72, defaultSize: 40 },
+    {
+      minSize: 0, maxSize: 72, defaultSize: 40, step: 1,
+    },
   )
 
   useEffect(() => {
@@ -70,6 +72,8 @@ const TextComponent: React.FC<Props> = ({ element }) => {
         {`
           .dynamic-placeholder-${element.id}::placeholder {
             color: ${element.color}40 !important;
+            font-size: ${fontSize}px;
+            line-height: ${fontSize * 1.2}px;
           }
         `}
       </style>
