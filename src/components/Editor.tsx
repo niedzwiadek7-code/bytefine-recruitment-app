@@ -57,7 +57,7 @@ const Editor: React.FC = () => {
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-5 lg:gap-8 pb-5 md:pb-0">
       <Header />
       <Line />
 
@@ -72,7 +72,7 @@ const Editor: React.FC = () => {
       </div>
 
       <div>
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Card
             title="Text"
             icon={<TextSvg className="w-20 h-20 fill-black75" />}
@@ -117,7 +117,7 @@ const Editor: React.FC = () => {
           Export to PNG
         </Button>
       </div>
-    </>
+    </div>
   )
 }
 

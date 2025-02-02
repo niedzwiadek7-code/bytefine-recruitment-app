@@ -12,7 +12,7 @@ const Card: React.FC<Props> = ({
   onClick,
 }) => (
   <div
-    className="bg-white97 flex flex-col items-center gap-5 pt-10 pb-2 rounded-lg cursor-pointer select-none"
+    className="bg-white97 flex flex-col items-center gap-5 pt-16 pb-5 rounded-lg cursor-pointer select-none"
     onClick={onClick}
     role="button"
     tabIndex={0}

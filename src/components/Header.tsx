@@ -17,24 +17,23 @@ const Header = () => {
     resetPoster,
   } = usePoster()
 
-  const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      padding: '1.5rem',
-      borderRadius: '1rem',
-      width: '550px',
-      // height: '584px'
-      // textAlign: 'center',
-    },
-    overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-  }
+  // const customStyles = {
+  //   content: {
+  //     top: '50%',
+  //     left: '50%',
+  //     right: 'auto',
+  //     bottom: 'auto',
+  //     marginRight: '-50%',
+  //     transform: 'translate(-50%, -50%)',
+  //     padding: '1.5rem',
+  //     borderRadius: '.5rem',
+  //     width: '550px',
+  //     paddingBottom: '2.2rem',
+  //   },
+  //   overlay: {
+  //     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  //   },
+  // }
 
   return (
     <div className="flex justify-between items-center">
@@ -61,38 +60,32 @@ const Header = () => {
       <ModalSafeForReact18
         isOpen={showModal}
         onRequestClose={() => setShowModal(false)}
-        style={customStyles}
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+        className="bg-white rounded-lg w-[90%] md:w-[550px] p-6 pb-9 outline-none"
       >
+        {/* Treść modala */}
         <div className="flex flex-col items-center gap-2">
-          <div
-            className="flex justify-end w-full"
-          >
+          <div className="flex justify-end w-full">
             <CloseSvg
               className="fill-black cursor-pointer w-6 h-6"
               onClick={() => setShowModal(false)}
             />
           </div>
 
-          <div
-            className="flex items-center justify-center w-full mb-5"
-          >
-            <AlertTriangle
-              className="fill-red w-[217px] h-[200px]"
-            />
+          <div className="flex items-center justify-center w-full mb-5">
+            <AlertTriangle className="fill-red w-[217px] h-[200px]" />
           </div>
 
-          <div
-            className="flex items-center justify-center w-full flex-col px-20"
-          >
+          <div className="flex items-center justify-center w-full flex-col px-2 md:px-20">
             <h2 className="text-xl font-bold mb-2 select-none">WARNING</h2>
-            <p className="text-sm mb-4 select-none">
+            <p className="text-sm mb-4 select-none text-center text-black75">
               You&#39;re about to reset the whole process. Are you sure you want to do it?
             </p>
           </div>
 
           <div className="flex gap-4 mt-4">
             <button
-              className="px-4 py-2 bg-white rounded hover:bg-white select-none"
+              className="px-4 py-2 bg-white rounded hover:bg-gray-100 select-none"
               onClick={() => setShowModal(false)}
               type="button"
             >
