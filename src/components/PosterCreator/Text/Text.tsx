@@ -80,7 +80,10 @@ const TextComponent: React.FC<Props> = ({ element }) => {
 
       <div
         ref={measurerRef}
-        className={`absolute invisible whitespace-pre-wrap break-words w-[${containerSize.width}px]`}
+        className="absolute invisible whitespace-pre-wrap break-words"
+        style={{
+          width: containerSize.width,
+        }}
       >
         {text}
       </div>
