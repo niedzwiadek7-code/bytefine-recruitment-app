@@ -63,7 +63,6 @@ const Header = () => {
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
         className="bg-white rounded-lg w-[90%] md:w-[550px] p-6 pb-9 outline-none"
       >
-        {/* Treść modala */}
         <div className="flex flex-col items-center gap-2">
           <div className="flex justify-end w-full">
             <CloseSvg
