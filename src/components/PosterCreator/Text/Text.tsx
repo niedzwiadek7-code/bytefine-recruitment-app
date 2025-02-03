@@ -19,6 +19,11 @@ const TextComponent: React.FC<Props> = ({ element }) => {
   const [isActive, setIsActive] = useState(activeElement === element.id)
   const [isEditing, setIsEditing] = useState(false)
   const [text, setText] = useState(element.text)
+  const [simpleDefaultSize, setSimpleDefaultSize] = useState(40)
+
+  useEffect(() => {
+    setSimpleDefaultSize(Math.sqrt(element.width * element.height) / 5.5)
+  }, [element.width, element.height])
 
   useEffect(() => {
     if (activeElement === element.id) {
@@ -37,7 +42,7 @@ const TextComponent: React.FC<Props> = ({ element }) => {
     containerSize.width,
     containerSize.height,
     {
-      minSize: 0, maxSize: 72, defaultSize: 40, step: 1,
+      minSize: 0, maxSize: 72, defaultSize: simpleDefaultSize, step: 1,
     },
   )
 
