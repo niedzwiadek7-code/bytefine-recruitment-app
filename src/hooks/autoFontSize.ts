@@ -17,6 +17,7 @@ const useAutoFontSize = (
 
   useEffect(() => {
     if (!measurer) return
+    if (maxWidth <= 0 || maxHeight <= 0) return
 
     if (!text) {
       setFontSize(options.defaultSize)
@@ -24,26 +25,36 @@ const useAutoFontSize = (
     }
 
     const calculateFontSize = () => {
+      let bestSize = options.minSize
+      measurer.style.fontSize = `${options.maxSize}px`
+
+      if (
+        measurer.scrollWidth <= maxWidth
+        && measurer.scrollHeight <= maxHeight
+      ) {
+        setFontSize(options.maxSize)
+        return
+      }
+
       let low = options.minSize
       let high = options.maxSize
-      let size = high
 
       while (low <= high) {
         const mid = Math.floor((low + high) / 2)
         measurer.style.fontSize = `${mid}px`
 
-        const widthOk = measurer.scrollWidth <= maxWidth
-        const heightOk = measurer.scrollHeight <= maxHeight
+        const fitsWidth = measurer.scrollWidth <= maxWidth
+        const fitsHeight = measurer.scrollHeight <= maxHeight
 
-        if (widthOk && heightOk) {
-          size = mid
-          low = mid + options.step
+        if (fitsWidth && fitsHeight) {
+          bestSize = mid
+          low = mid + 1
         } else {
-          high = mid - options.step
+          high = mid - 1
         }
       }
 
-      setFontSize(size)
+      setFontSize(bestSize)
     }
 
     calculateFontSize()

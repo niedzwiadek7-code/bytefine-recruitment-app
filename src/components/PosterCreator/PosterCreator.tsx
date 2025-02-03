@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import startImage from '../../assets/startimage.png'
 import ElementComponent from './Element'
 import { usePoster } from '../../context/Poster'
@@ -7,26 +7,45 @@ import ImageBackground from '../ImageBackground'
 type Props = {}
 
 const PosterCreator: React.FC<Props> = () => {
-  const { poster } = usePoster()
+  const {
+    poster,
+    setSize,
+  } = usePoster()
+  const [initialPosterSizeSet, setInitialPosterSizeSet] = useState(false)
+
+  const handleResize = () => {
+    const contentWrapper = document.getElementById('content-wrapper')
+    if (contentWrapper) {
+      setSize({
+        width: contentWrapper.clientWidth,
+        height: contentWrapper.clientHeight,
+      })
+    }
+  }
 
   useEffect(() => {
-    const preloadImage = (src: string) => {
-      const img = new Image()
-      img.src = src
+    if (!initialPosterSizeSet) {
+      handleResize()
+      setInitialPosterSizeSet(true)
     }
+  }, [poster.elements.length, poster.background])
 
-    if (poster.background) {
-      preloadImage(poster.background)
-    }
-    preloadImage(startImage)
-  }, [poster.background])
+  useEffect(() => {
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   if (poster.elements.length === 0 && !poster.background) {
     return (
-      <ImageBackground
-        alt="Start Image"
-        image={startImage}
-      />
+      <div
+        id="content-wrapper"
+        className="w-full h-full"
+      >
+        <ImageBackground
+          alt="Start Image"
+          image={startImage}
+        />
+      </div>
     )
   }
 

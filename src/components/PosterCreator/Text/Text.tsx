@@ -80,10 +80,7 @@ const TextComponent: React.FC<Props> = ({ element }) => {
 
       <div
         ref={measurerRef}
-        className="absolute invisible whitespace-pre-wrap break-words"
-        style={{
-          width: containerSize.width,
-        }}
+        className="absolute invisible whitespace-pre-wrap"
       >
         {text}
       </div>
@@ -103,7 +100,7 @@ const TextComponent: React.FC<Props> = ({ element }) => {
             })
             setIsEditing(false)
           }}
-          className={`w-full h-full resize-none bg-transparent outline-none overflow-hidden placeholder-gray-500 text-center text-display dynamic-placeholder-${element.id}`}
+          className={`w-full h-full resize-none bg-transparent outline-none overflow-hidden placeholder-gray-500 text-center text-display dynamic-placeholder-${element.id} font-bold`}
           placeholder="Type your text here"
           style={{
             color: element.color,
@@ -113,7 +110,7 @@ const TextComponent: React.FC<Props> = ({ element }) => {
         />
       ) : (
         <div
-          className="w-full h-full flex items-center justify-center cursor-text break-words text-center whitespace-pre-wrap select-none"
+          className="w-full h-full flex items-center justify-center cursor-text text-center whitespace-pre-wrap select-none font-bold"
           style={{
             color: element.color,
             fontSize: `${fontSize}px`,

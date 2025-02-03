@@ -1,16 +1,18 @@
 /* eslint-disable no-unused-vars */
 
 import React, {
-  ReactNode, createContext, useState, useMemo,
+  ReactNode, createContext, useState, useMemo, useCallback,
 } from 'react'
-import { Poster, Text, Image } from '../models'
+import {
+  Poster, Text, Image, Size,
+} from '../models'
 
 type Position = {
   x: number
   y: number
 }
 
-type Size = {
+type ContextSize = {
   width?: number
   height?: number
 }
@@ -26,7 +28,7 @@ class PosterClass {
 
   setPoster: (poster: Poster) => void
 
-  handleBoxChange: (id: number, position: Position, size: Size) => void
+  handleBoxChange: (id: number, position: Position, size: ContextSize) => void
 
   setContent: (id: number, content: Partial<Content>) => void
 
@@ -44,10 +46,12 @@ class PosterClass {
 
   setInActiveElement: (id: number) => void
 
+  setSize: (size: Size) => void
+
   constructor(
     poster: Poster = new Poster(),
     setPoster: (el: Poster) => void = () => {},
-    handleBoxChange: (id: number, position: Position, size: Size) => void = () => {},
+    handleBoxChange: (id: number, position: Position, size: ContextSize) => void = () => {},
     setContent: (id: number, content: Partial<Content>) => void = () => {},
     deleteElement: (id: number) => void = () => {},
     activeElement: number | null = null,
@@ -56,6 +60,7 @@ class PosterClass {
     setBackground: (background: string) => void = () => {},
     resetPoster: () => void = () => {},
     setInActiveElement: (id: number) => void = () => {},
+    setSize: (size: Size) => void = () => {},
   ) {
     this.poster = poster
     this.setPoster = setPoster
@@ -68,6 +73,7 @@ class PosterClass {
     this.setBackground = setBackground
     this.resetPoster = resetPoster
     this.setInActiveElement = setInActiveElement
+    this.setSize = setSize
   }
 }
 
@@ -81,7 +87,7 @@ export const PosterProvider: React.FC<ProviderProps> = (props) => {
   const [poster, setPoster] = useState<Poster>(new Poster())
   const [activeElement, setActiveElement] = useState<number | null>(null)
 
-  const handleBoxChange = (id: number, position: Position, size: Size) => {
+  const handleBoxChange = (id: number, position: Position, size: ContextSize) => {
     setPoster(
       (prevPoster) => prevPoster.updateElement(id, { x: position.x, y: position.y, ...size }),
     )
@@ -95,14 +101,16 @@ export const PosterProvider: React.FC<ProviderProps> = (props) => {
     setPoster((prevPoster) => prevPoster.removeElement(id))
   }
 
-  const addElement = (type: string) => {
+  const addElement = useCallback((type: string) => {
     setPoster((prevPoster) => {
       if (type === 'text') {
+        const width = Math.min(300, poster.size.width / 2)
+        const height = Math.min(150, poster.size.height / 4)
         const element: Omit<Text, 'id'> = {
-          x: 100,
-          y: 100,
-          width: 300,
-          height: 150,
+          x: prevPoster.size.width / 2 - width / 2,
+          y: prevPoster.size.height / 2 - height / 2,
+          width,
+          height,
           text: '',
           type: 'text',
           color: '#353535',
@@ -113,11 +121,14 @@ export const PosterProvider: React.FC<ProviderProps> = (props) => {
         return newPoster
       }
 
+      const width = Math.min(200, poster.size.width / 2)
+      const height = Math.min(200, poster.size.height / 2)
+
       const element: Omit<Image, 'id'> = {
-        x: 100,
-        y: 100,
-        width: 300,
-        height: 150,
+        x: prevPoster.size.width / 2 - width / 2,
+        y: prevPoster.size.height / 2 - height / 2,
+        width,
+        height,
         content: '',
         type: 'image',
       }
@@ -127,7 +138,7 @@ export const PosterProvider: React.FC<ProviderProps> = (props) => {
 
       return newPoster
     })
-  }
+  }, [poster.size.height, poster.size.width])
 
   const setBackground = (background: string) => {
     setPoster((prevPoster) => prevPoster.setBackground(background))
@@ -151,6 +162,10 @@ export const PosterProvider: React.FC<ProviderProps> = (props) => {
     setActiveElement(id)
   }
 
+  const setSize = (size: Size) => {
+    setPoster((prevPoster) => prevPoster.setSize(size))
+  }
+
   const newPosterClass = useMemo(() => new PosterClass(
     poster,
     setPoster,
@@ -163,7 +178,8 @@ export const PosterProvider: React.FC<ProviderProps> = (props) => {
     setBackground,
     resetPoster,
     setInActiveElement,
-  ), [poster, activeElement])
+    setSize,
+  ), [poster, activeElement, addElement])
 
   return (
     <PosterContext.Provider value={newPosterClass}>
