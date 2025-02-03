@@ -75,4 +75,10 @@ export class Poster {
     newPoster.size = size
     return newPoster
   }
+
+  updateElementsQueue(elements: Element[]) {
+    const newPoster = this.copyWith({})
+    newPoster.elements = elements
+    return newPoster
+  }
 }

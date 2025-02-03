@@ -148,18 +148,27 @@ export const PosterProvider: React.FC<ProviderProps> = (props) => {
     setPoster(new Poster())
   }
 
+  const setActiveElementFunction = (id: number | null) => {
+    const elements = poster.elements.sort((a, b) => {
+      if (a.id === id) return 1
+      if (b.id === id) return -1
+      return a.id - b.id
+    })
+
+    setPoster((prevPoster) => prevPoster.updateElementsQueue(elements))
+    setActiveElement(id)
+  }
+
   const setInActiveElement = (id: number) => {
     setActiveElement((prevValue) => {
       if (prevValue === id) {
+        // setActiveElementFunction(null)
         return null
       }
 
+      // setActiveElementFunction(prevValue)
       return prevValue
     })
-  }
-
-  const setActiveElementFunction = (id: number | null) => {
-    setActiveElement(id)
   }
 
   const setSize = (size: Size) => {
